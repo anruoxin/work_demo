@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/havefun_ticketbuy?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+
+mybatis:
+  mapper-locations: classpath:cn/weicelove/test/dao/mapper/*.xml
+  # type-aliases-package: cn.weicelove.test.entity

@@ -9,8 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>havefun-multi-other</artifactId>
-
+    <artifactId>havefun-multi-ticketbuy</artifactId>
 
     <dependencies>
 
@@ -32,7 +31,6 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>1.3.2</version>
         </dependency>
-
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-spring-boot-starter</artifactId>
@@ -63,4 +61,5 @@
             </resource>
         </resources>
     </build>
+
 </project>
