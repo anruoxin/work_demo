@@ -18,12 +18,24 @@ public class SearchInfo implements Serializable{
      * purpose_codes: ADULT
      */
 
+    /**
+     * 出发日期
+     */
     private String trainDate;
 
+    /**
+     * 出发站
+     */
     private String fromStation;
 
+    /**
+     * 达到站
+     */
     private String toStation;
 
+    /**
+     * 出发人身份，大人，学生
+     */
     private String purposeCodes;
 
     private boolean checkAnyPropertyValueBlank() {
