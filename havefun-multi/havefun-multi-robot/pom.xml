@@ -9,26 +9,22 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>havefun-multi-util</artifactId>
+    <artifactId>havefun-multi-robot</artifactId>
+    <packaging>pom</packaging>
 
     <dependencies>
 
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.kennycason</groupId>
-            <artifactId>kumo-core</artifactId>
-            <version>1.17</version>
+            <groupId>cn.weicelove</groupId>
+            <artifactId>havefun-multi-util</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>com.kennycason</groupId>
-            <artifactId>kumo-tokenizers</artifactId>
-            <version>1.17</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
+
     </dependencies>
-
 </project>
