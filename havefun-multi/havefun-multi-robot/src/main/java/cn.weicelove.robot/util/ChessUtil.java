@@ -18,8 +18,6 @@ public class ChessUtil {
 
     private static String[] axisX = {"一","二","三","四","五","六","七","八","九"};
 
-    private static Board chessBoard;
-
     public static void main(String[] args) {
         initChessBoard(new BlackChess(), new RedChess(), new Board());
 //        System.out.println("初始化完成");
@@ -27,14 +25,13 @@ public class ChessUtil {
     }
 
     public static String initChessBoard(BlackChess blackChess, RedChess redChess,Board board) {
-        ChessUtil.chessBoard = board;
-        entityToMap(blackChess, redChess);
-        printBoard();
+        entityToMap(blackChess, redChess, board);
+        printBoard(board);
         return null;
     }
 
-    public static void printBoard() {
-        if (chessBoard == null) {
+    public static void printBoard(Board board) {
+        if (board == null) {
             logger.info("棋盘初始化未完成！");
             return;
         }
@@ -42,11 +39,11 @@ public class ChessUtil {
         initAxis(false);
         initLine();
         for (int i = 1; i <= 5; i++) {
-            initChess(i);
+            initChess(i, board);
         }
         initRiver();
         for (int i = 6; i <= 10; i++) {
-            initChess(i);
+            initChess(i, board);
         }
         initLine();
         initAxis(true);
@@ -60,24 +57,28 @@ public class ChessUtil {
         initLine();
     }
 
-    private static void addRedChess(Pair<Integer, Position> chess) {
+    private static void addRedChess(Pair<Integer, Position> chess, Board board) {
         Integer x = chess.getValue().getX();
         Integer y = chess.getValue().getY();
-        chessBoard.getBoard()[x][y] = chess.getKey();
+        board.getBoard()[x][y] = chess.getKey();
     }
 
-    private static void addBlackChess(Pair<Integer, Position> chess) {
+    private static void addBlackChess(Pair<Integer, Position> chess, Board board) {
         Integer x = chess.getValue().getX();
         Integer y = chess.getValue().getY();
-        chessBoard.getBoard()[10 - x][11 - y] = chess.getKey();
+        board.getBoard()[10 - x][11 - y] = chess.getKey();
     }
 
-    private static List<Pair<Integer, Position>> entityToMap(BlackChess blackChess, RedChess redChess) {
+    private static List<Pair<Integer, Position>> entityToMap(BlackChess blackChess, RedChess redChess, Board board) {
         // 以红色的左边的车的,以左上角为(1, 1)
         List<Pair<Integer, Position>> redChessList = redChess.getList();
-        redChessList.forEach(ChessUtil::addRedChess);
+        for (Pair<Integer, Position> integerPositionPair : redChessList) {
+            addRedChess(integerPositionPair, board);
+        }
         List<Pair<Integer, Position>> blackChessList = blackChess.getList();
-        blackChessList.forEach(ChessUtil::addBlackChess);
+        for (Pair<Integer, Position> integerPositionPair : blackChessList) {
+            addBlackChess(integerPositionPair, board);
+        }
         return null;
     }
 
@@ -104,10 +105,10 @@ public class ChessUtil {
         System.out.println();
     }
 
-    private static void initChess(int y) {
+    private static void initChess(int y, Board board) {
         System.out.print(String.format("%02d| ", y));
         for (int i = 1; i <= 9; i++) {
-            ChessEnum chessEnum = ChessEnum.of(chessBoard.getBoard()[i][y]);
+            ChessEnum chessEnum = ChessEnum.of(board.getBoard()[i][y]);
             if (chessEnum != null) {
                 System.out.print(chessEnum.getName());
             } else {

@@ -4,7 +4,7 @@ import cn.weicelove.robot.constants.ChineseChessEnum.NumberEnum;
 import cn.weicelove.robot.entity.Board;
 import cn.weicelove.robot.entity.Position;
 import cn.weicelove.robot.util.ChessUtil;
-import cn.weicelove.robot.util.RegexUtil;
+import cn.weicelove.robot.util.OperationDealUtil;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -38,8 +38,7 @@ public abstract class Operation {
     abstract void Xaxis(Position pos, int step);
     abstract void Yaxis(Position pos, int step);
     abstract void XYaxis(Position pos, int xstep, int ystep);
-    void dealChessOperate(String operateStr){
-        Position position = RegexUtil.dealOperate(operateStr, getChessBoard());
+    public void dealChessOperate(Position position, String operateStr){
         if (position == null) {
             throw new NullPointerException("未在棋盘上找到该棋子");
         }
@@ -47,13 +46,13 @@ public abstract class Operation {
         Integer step = NumberEnum.of(StringUtils.substring(operateStr, -1)).getValue();
         switch (direction) {
             case "进":
-                Xaxis(position, isBeRed() ? step : -step);
+                Yaxis(position, isBeRed() ? step : -step);
                 break;
             case "退":
-                Xaxis(position, isBeRed() ? -step : step);
+                Yaxis(position, isBeRed() ? -step : step);
                 break;
             case "平":
-                Yaxis(position, isBeRed() ?  step - position.getX() : (9 - step + 1) - position.getX());
+                Xaxis(position, isBeRed() ?  step - position.getX() : (9 - step + 1) - position.getX());
                 break;
         }
     }
@@ -81,9 +80,10 @@ public abstract class Operation {
      */
     void changePos(Position oldPosition, Position newPosition) {
         try {
+            logger.info("正在将({}, {}) 的棋子移动至({}, {})", oldPosition.getX(), oldPosition.getY(), newPosition.getX(), newPosition.getY());
             chessBoard.getBoard()[newPosition.getX()][newPosition.getY()] = chessBoard.getBoard()[oldPosition.getX()][oldPosition.getY()];
             chessBoard.getBoard()[oldPosition.getX()][oldPosition.getY()] = 0;
-            ChessUtil.printBoard();
+            ChessUtil.printBoard(chessBoard);
         }catch (Exception e) {
             logger.error(String.format("棋子移动失败！oldPos(%d, %d) : newPos(%d, %d)",
                     oldPosition.getX(), oldPosition.getY(), newPosition.getX(), newPosition.getY()), e);

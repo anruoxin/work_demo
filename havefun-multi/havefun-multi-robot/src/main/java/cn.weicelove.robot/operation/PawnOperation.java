@@ -3,7 +3,7 @@ package cn.weicelove.robot.operation;
 import cn.weicelove.robot.constants.ChineseChessEnum.NumberEnum;
 import cn.weicelove.robot.entity.Board;
 import cn.weicelove.robot.entity.Position;
-import cn.weicelove.robot.util.RegexUtil;
+import cn.weicelove.robot.util.OperationDealUtil;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -44,8 +44,7 @@ public class PawnOperation extends Operation {
     }
 
     @Override
-    public void dealChessOperate(String operateStr) {
-        Position position = RegexUtil.dealOperate(operateStr, getChessBoard());
+    public void dealChessOperate(Position position, String operateStr) {
         if (position == null) {
             throw new NullPointerException("未在棋盘上找到该棋子");
         }
@@ -53,10 +52,10 @@ public class PawnOperation extends Operation {
         Integer step = NumberEnum.of(StringUtils.substring(operateStr, -1)).getValue();
         switch (direction) {
             case "进":
-                Xaxis(position, isBeRed() ? step : -step);
+                Yaxis(position, isBeRed() ? step : -step);
                 break;
             case "平":
-                Yaxis(position, isBeRed() ?  step - position.getX() : (9 - step + 1) - position.getX());
+                Xaxis(position, isBeRed() ?  step - position.getX() : (9 - step + 1) - position.getX());
                 break;
         }
 
