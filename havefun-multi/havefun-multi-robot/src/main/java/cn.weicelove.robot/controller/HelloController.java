@@ -67,13 +67,4 @@ public class HelloController {
         ChessUtil.printBoard(board);
     }
 
-    public static boolean isBlack(String s) {
-        for (int i = 0; i < ChineseChessEnum.getChess().length; i++) {
-            if (s.contains(ChineseChessEnum.getChess()[i])){
-                return ChessEnum.isBlack(ChineseChessEnum.getChess()[i]);
-            }
-        }
-        throw new NotFindChessException("no find the chess " + s);
-    }
-
 }

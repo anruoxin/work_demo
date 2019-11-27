@@ -14,10 +14,10 @@ public class TestApplication {
     public static void main(String[] args) {
         SpringApplication springApplication = new SpringApplication(TestApplication.class);
         ConfigurableApplicationContext run = springApplication.run(args);
-        String[] beanDefinitionNames = run.getBeanDefinitionNames();
-        for (String beanDefinitionName : beanDefinitionNames) {
-            System.out.println("注册的bean: " + beanDefinitionName);
-        }
+//        String[] beanDefinitionNames = run.getBeanDefinitionNames();
+//        for (String beanDefinitionName : beanDefinitionNames) {
+//            System.out.println("注册的bean: " + beanDefinitionName);
+//        }
         //SpringApplication.run(TestApplication.class, args);
     }
 }

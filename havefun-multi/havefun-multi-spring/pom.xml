@@ -9,8 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>havefun-multi-robot</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>havefun-multi-spring</artifactId>
 
     <dependencies>
 
@@ -24,12 +23,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <artifactId>taobao-sdk-java-auto</artifactId>
-            <groupId>com.dingtalk.open</groupId>
-            <version>1479188381469-20191119</version>
         </dependency>
 
     </dependencies>

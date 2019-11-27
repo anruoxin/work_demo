@@ -1,7 +1,10 @@
 package cn.weicelove.util.file;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.FileCopyUtils;
@@ -12,6 +15,15 @@ import org.springframework.util.FileCopyUtils;
 public class FileUtil {
 
     private static Logger log = LoggerFactory.getLogger(FileUtil.class);
+
+    public static void transferTo(InputStream inputStream, String desPath) throws IOException {
+        File file = new File(desPath);
+        FileCopyUtils.copy(inputStream, new FileOutputStream(file));
+    }
+
+    public static void transferTo(InputStream inputStream, File des) throws IOException {
+        FileCopyUtils.copy(inputStream, new FileOutputStream(des));
+    }
 
     /**
      *
@@ -37,9 +49,9 @@ public class FileUtil {
         return file.exists() && file.isDirectory();
     }
 
-    public static File createFile(String fileName, String suffix, String filePath) {
-        // FileCopyUtils.copy()
-        File file = new File(filePath + File.separator + fileName + suffix);
+
+    public static File createFile(String filePath) throws IOException {
+        File file = new File(filePath);
         if (file.exists()) {
             return file;
         }
@@ -51,18 +63,18 @@ public class FileUtil {
                 return null;
             }
         }
-
-        try {
-            if (file.createNewFile()) {
-                log.info("创建文件成功 {}", fileName);
-                return file;
-            } else {
-                log.info("创建目标文件失败");
-            }
-        } catch (IOException e) {
-            log.error("创建目标文件失败， 失败原因如下:", e);
+        if (file.createNewFile()) {
+            log.info("创建文件成功 {}", filePath);
+            return file;
+        } else {
+            log.info("创建目标文件失败");
         }
         return null;
+    }
+
+    public static File createFile(String fileName, String suffix, String filePath) throws IOException {
+        // FileCopyUtils.copy()
+        return createFile(filePath + File.separator + fileName + suffix);
     }
 
 }

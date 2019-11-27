@@ -116,7 +116,12 @@ public class Test {
 
         @Override
         public void run() {
-            File file = FileUtil.createFile(fileName, "", filePath);
+            File file = null;
+            try {
+                file = FileUtil.createFile(fileName, "", filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             if (file == null) {
                 return;
             }

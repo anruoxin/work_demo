@@ -174,7 +174,12 @@ public class FileWriteTest {
 
         @Override
         public void run() {
-            File file = FileUtil.createFile(fileName, ".txt", filePath);
+            File file = null;
+            try {
+                file = FileUtil.createFile(fileName, ".txt", filePath);
+            } catch (IOException e) {
+                log.error("文件创建失败", e);
+            }
             if (file == null) {
                 log.info("文件为空， 写入失败");
                 return;
