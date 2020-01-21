@@ -1,10 +1,22 @@
 package cn.weicelove.util.file;
 
+import com.alibaba.fastjson.JSONObject;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.FileFileFilter;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.FileCopyUtils;
@@ -15,6 +27,18 @@ import org.springframework.util.FileCopyUtils;
 public class FileUtil {
 
     private static Logger log = LoggerFactory.getLogger(FileUtil.class);
+
+    public static void main(String[] args) {
+        List<File> files = listFile();
+        files.forEach(System.out::println);
+    }
+
+    public static List<File> listFile() {
+
+        Collection<File> files = FileUtils.listFiles(new File("c://anruoxin//test_file"),FileFilterUtils.asFileFilter(e ->
+                e.isFile() && !e.getName().endsWith(".rar")) , DirectoryFileFilter.DIRECTORY);
+        return new ArrayList<>(files);
+    }
 
     public static void transferTo(InputStream inputStream, String desPath) throws IOException {
         File file = new File(desPath);
@@ -47,6 +71,28 @@ public class FileUtil {
     public static boolean beDir(String path) {
         File file = new File(path);
         return file.exists() && file.isDirectory();
+    }
+
+    /**
+     *
+     * 获取路径下所有的文件名称
+     * @param filePath 文件路径
+     * @return com.alibaba.fastjson.JSONObject
+     * @author QIU PANWEI
+     */
+    public static void getFileListByPath(String filePath, Set<String> fileList) {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return ;
+        }
+        File[] files = file.listFiles();
+        for (File file1 : files) {
+            if (file1.isDirectory()) {
+                getFileListByPath(file1.getAbsolutePath(), fileList);
+            } else {
+                fileList.add(file1.getName());
+            }
+        }
     }
 
 

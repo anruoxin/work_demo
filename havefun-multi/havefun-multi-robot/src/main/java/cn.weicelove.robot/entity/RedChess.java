@@ -13,6 +13,8 @@ import lombok.Data;
 @Data
 public class RedChess extends ChineseChess{
 
+    private static final long serialVersionUID = 3002225740098785526L;
+
     /**
      * 中文标号 一~九 从左到右
      */

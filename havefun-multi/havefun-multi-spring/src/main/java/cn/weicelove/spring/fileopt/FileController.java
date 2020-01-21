@@ -1,9 +1,16 @@
 package cn.weicelove.spring.fileopt;
 
-import cn.weicelove.util.date.DateUtil;
+import cn.weicelove.spring.aop.Log;
 import cn.weicelove.util.file.FileUtil;
+import com.alibaba.fastjson.JSONObject;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.HashSet;
+import java.util.Set;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +37,7 @@ public class FileController {
      * @return void
      * @author QIU PANWEI
      */
+    @Log("上传文件")
     @RequestMapping("/upload")
     public void upload(@RequestParam("files") MultipartFile[] files) {
         System.out.println("文件个数: " + files.length);
@@ -45,8 +53,35 @@ public class FileController {
      * @author QIU PANWEI
      */
     @RequestMapping("/download")
-    public void download(String fileName) {
+    public void download(String fileName, HttpServletResponse response) {
 
+        try {
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("multipart/form-data");
+            response.setHeader("Content-Disposition", "attachment;fileName="
+                    + java.net.URLEncoder.encode(fileName,"utf-8"));
+//            String filePath = request.getSession().getServletContext().getRealPath("/")
+//                    + "WEB-INF/upload/" + fileName;
+            InputStream inputStream = new FileInputStream(new File(fileRootPath + fileName));
+            OutputStream os = response.getOutputStream();
+            byte[] b = new byte[2048];
+            int length;
+            while ((length = inputStream.read(b)) > 0) {
+                os.write(b, 0, length);
+            }
+            os.close();
+            inputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @RequestMapping("/getFileList")
+    public String getFileList() {
+        Set<String> files = new HashSet<>();
+        FileUtil.getFileListByPath(fileRootPath, files);
+        return JSONObject.toJSONString(files);
     }
 
     private void uploadFiles(MultipartFile[] files) {
@@ -63,14 +98,14 @@ public class FileController {
 
         // 文件名称带后缀
         String originalFilename = file.getOriginalFilename();
-        logger.info("originalFilename = {}", originalFilename);
+        logger.debug("originalFilename = {}", originalFilename);
         // 前端传递的参数名称
         String name = file.getName();
-        logger.info("name= {}", name);
+        logger.debug("name= {}", name);
         long size = file.getSize();
-        logger.info("size = {}", size);
+        logger.debug("size = {}", size);
         try {
-            File desFile = FileUtil.createFile(fileRootPath + DateUtil.getNowTimeStr() + originalFilename);
+            File desFile = FileUtil.createFile(fileRootPath + originalFilename);
             if (desFile == null) {
                 logger.debug("目标文件生成失败");
                 return;
